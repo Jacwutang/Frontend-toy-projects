@@ -57,11 +57,13 @@ margin-top: 50%;
 </div>
 
 <script>
-	let divs = document.querySelectorAll('div');
+	let div = document.getElementById('main');
 
-    divs.forEach( (div) => {
-    	div.addEventListener('click', (e) => window.alert(e.currentTarget.childNodes[0].textContent))
-   	})
+    div.onclick = function(e){
+    	window.alert(e.target.childNodes[0].textContent)
+    }
+
+
 
 </script>
 

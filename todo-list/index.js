@@ -23,23 +23,33 @@ function App(){
   main.append(input);
   main.append(button);
 
+  fetchTodos();
 
-  function appendToList(){
+
+
+
+  function appendToList(content){
       //create li and append to list
       let delButton = document.createElement('button');
       delButton.textContent = "Delete";
       delButton.onclick = deleteFromList;
 
       let li = document.createElement('li');
-      li.textContent = document.querySelector('input').value;
+
+      let inputContent = document.querySelector('input').value;
+      console.log("HJERE",inputContent);
+      li.textContent = (inputContent) === ""? content: inputContent;
+
+
       li.append(delButton);
       ul.append(li);
 
       //add to localStorage
 
-      addToStorage(li);
-      let list = JSON.parse(localStorage.getItem('todolist'));
-      //console.log(li) returns array of empty objects
+      let textContent = li.childNodes[0].textContent;
+      addToStorage(textContent);
+      // let list = JSON.parse(localStorage.getItem('todolist'));
+      // console.log(list[0])
 
 
       //clear input
@@ -48,49 +58,47 @@ function App(){
 
   }
 
-  function addToStorage(li){
-    listElements.push(li);
+  function addToStorage(content){
+
+    listElements.push(content);
 
     localStorage.setItem('todolist', JSON.stringify(listElements));
 
   }
 
-  function removeFromStorage(){
+  function removeFromStorage(li){
 
+    let content = li.childNodes[0].textContent;
+    listElements = listElements.filter( (el) => el !== content );
+    localStorage.setItem('todolist', JSON.stringify(listElements));
   }
 
   function deleteFromList(){
     //remove li from list
     let li = this.parentElement;
+
+
+
+    //remove from localStorage first
+    removeFromStorage(li);
     li.remove();
-
-
-    //remove from localStorage
-    removeFromStorage();
   }
 
-  var fetchTodos = function(){
-    // return Todos from localStorage
+  function fetchTodos(){
+    let list = JSON.parse(localStorage.getItem('todolist'));
+
+    for(let i = 0; i < list.length;i++){
+      appendToList(list[i]);
+    }
   }
 
-
-  return{
-    fetchTodos
-  }
-
-
-
-
-
-
-
-
-
-}
+} // App
 
 
 
 window.onload = () => {
   var app = App();
+
+
 
 }
